@@ -82,5 +82,60 @@
       (if (string=? how "title")
           (sort-by-title books)
           (sort-by-pages books))))
+
+;; this function asks the user for information (the title, author, and number of pages of a book) and returns the Book
+;; void -> Book
+
+#; (check-expect (read-Book) (make-Book "Hoot" "Joe" 100))
+
+(define (read-Book)
+  (println "Enter the book title.")
+  (define title (read-line))
   
-  (test)
+  (println "Enter the author's name.")
+  (define author (read-line))
+  
+  (println "Enter the number of pages.")
+  (define pages (read-line))
+  
+  (make-Book title author (string->number pages)))
+
+;; this function asks the user for the information about many books and returns a list of those Books
+
+#;(check-expect (read-library)
+              (list (Book "Hoot" "Joe" 100)))
+
+;;  (for ([i (in-range 0 (length books))]) ;; for(int i = 0; i < books.length; i++) { ... }
+;;  (gvector-add! result (Book-title (list-ref books i))))
+;;  (gvector->list result))
+
+(define (read-library)
+  (println "How many books would you like to enter?")
+  (define num (string->number (read-line)))
+  
+  (define result (gvector))
+  
+  (for ([i (in-range 0 num)])
+    (gvector-add! result (read-Book)))
+  (gvector->list result))
+
+;; this function takes a list of Books, then asks the user how the given list should be sorted (author, title, or pages), and returns the sorted list
+;; list-of-Books -> list-of-Books
+
+#;(check-expect (UI-sort-library my-library)
+              (list "Eragon" "The Bible" "The Great Gatsby"))
+
+(define (UI-sort-library library)
+  (println "How should these books be sorted? (author, title, or pages?")
+  (sort-how library (read-line)))
+
+;; this function reads a library and how to sort it, then returns the sorted list of titles
+;; void -> list
+
+#; (check-expect (read-library-and-sort)
+              (list "Hoot" "Cookbook"))
+
+(define (read-library-and-sort)
+  (UI-sort-library (read-library)))
+
+(test)
